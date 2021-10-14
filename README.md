@@ -174,7 +174,7 @@ This library has been tested on the .NET Core 3.0, .NET 5 and .NET Framework 4.6
 
 ## Performance
 
-This library was created having coarse-grained operations in mind. …Ù has not been
+This library was created having coarse-grained operations in mind. It has not been
 micro-optimized regarding the allocation of the few, small, short-lived objects that
 are created while the loop is running. If the work is too lightweight, the overhead
 might be significant. As a rule of thumb, around 500 bytes are allocated temporarily
