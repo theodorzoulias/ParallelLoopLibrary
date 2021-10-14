@@ -3,7 +3,7 @@
 # Parallel Loop Library
 
 This .NET library helps at creating loops of actions that are running in parallel to each other,
-but sequentially to themselves. In each iteration of the loop, all actions are invoked once.
+but sequentially to themselves. On each iteration of the loop, all actions are invoked once.
 The result of one action can by the input of another action, in which case the second
 action is dependent on the first action. Dependent actions start running when their
 dependency produces the first result. The loop ends when a
