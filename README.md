@@ -167,7 +167,8 @@ Task paralleLoop = ParallelLoopBuilder
 
 ## How to embed this library into your project
 
-This library has no NuGet package. You can either [download](https://github.com/theodorzoulias/ParallelLoopLibrary/releases) the project and build it locally, or just
+You can install the [ParallelLoopLibrary](https://www.nuget.org/packages/ParallelLoopLibrary/) NuGet package. ![Nuget](https://img.shields.io/nuget/v/ParallelLoopLibrary)
+You can also [download](https://github.com/theodorzoulias/ParallelLoopLibrary/releases) the project and build it locally, or just
 embed the single code file [`ParallelLoopBuilder.cs`](https://github.com/theodorzoulias/ParallelLoopLibrary/blob/main/src/ParallelLoopLibrary/ParallelLoopBuilder.cs)
 (~800 lines of code) into your project.
 This library has been tested on the .NET Core 3.0, .NET 5 and .NET Framework 4.6 platforms.
