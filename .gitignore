@@ -341,6 +341,6 @@ healthchecksdb
 
 apps/*
 _VARIOUS/
-_Notes.txt
 .editorconfig
 ParallelLoopLibrary.Local.sln
+logo_square.png

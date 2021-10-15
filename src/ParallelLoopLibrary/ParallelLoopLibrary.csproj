@@ -8,7 +8,7 @@
     <Authors>Theodor Zoulias</Authors>
     <Description>A .NET library that helps at creating parallel loops of dependent or independent actions</Description>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
-    <PackageIcon>logo.png</PackageIcon>
+    <PackageIcon>logo_square.png</PackageIcon>
     <PackageProjectUrl>https://github.com/theodorzoulias/ParallelLoopLibrary</PackageProjectUrl>
     <PackageTags>parallel;loop</PackageTags>
   </PropertyGroup>
@@ -18,7 +18,7 @@
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>
-    <None Include="..\..\logo.png">
+    <None Include="..\..\logo_square.png">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>
