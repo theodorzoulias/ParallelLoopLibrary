@@ -87,7 +87,7 @@ are still available for the third dependent action.
 
 ## Where is the loop running?
 
-The loop in running on the [`ThreadPool`](https://docs.microsoft.com/en-us/dotnet/api/system.threading.threadpool).
+The loop is running on the [`ThreadPool`](https://docs.microsoft.com/en-us/dotnet/api/system.threading.threadpool).
 It is possible to configure it to run on the current
 [`SynchronizationContext`](https://docs.microsoft.com/en-us/dotnet/api/system.threading.synchronizationcontext),
 by using the `ToParallelLoop` overload that accepts a `executeOnCurrentContext` argument.
