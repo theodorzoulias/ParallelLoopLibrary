@@ -4,13 +4,18 @@
     <TargetFrameworks>netstandard2.0;net46</TargetFrameworks>
     <AssemblyName>ParallelLoopLibrary</AssemblyName>
     <RootNamespace>ParallelLoopLibrary</RootNamespace>
-    <Version>1.0.1</Version>
+    <Version>1.0.2</Version>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <Authors>Theodor Zoulias</Authors>
     <Description>A .NET library that helps at creating parallel loops of dependent or independent actions</Description>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageIcon>logo_square.png</PackageIcon>
     <PackageProjectUrl>https://github.com/theodorzoulias/ParallelLoopLibrary</PackageProjectUrl>
     <PackageTags>parallel;loop</PackageTags>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard2.0|AnyCPU'">
+    <DocumentationFile></DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
