@@ -34,6 +34,29 @@ namespace ParallelLoopLibrary.Tests
                 Assert.IsTrue(parallelLoop.IsFaulted);
                 Assert.IsTrue(parallelLoop.Exception.InnerExceptions.Count == 1);
             }
+            {
+                var cts = new CancellationTokenSource();
+                var parallelLoop = ParallelLoopBuilder
+                    .BeginWith(async () => {await Task.CompletedTask; throw new OperationCanceledException();})
+                    .ToParallelLoop(cts.Token);
+                var ex = await Assert.ThrowsExceptionAsync<OperationCanceledException>(
+                    () => parallelLoop);
+                Assert.IsTrue(parallelLoop.IsFaulted);
+                Assert.IsTrue(parallelLoop.Exception.InnerExceptions.Count == 1);
+            }
+            {
+                var cts = new CancellationTokenSource();
+                var unknownCts = new CancellationTokenSource();
+                var parallelLoop = ParallelLoopBuilder
+                    .BeginWith(() => Task.Delay(Timeout.Infinite, unknownCts.Token))
+                    .Add(() => unknownCts.Cancel())
+                    .ToParallelLoop(cts.Token);
+                var ex = await Assert.ThrowsExceptionAsync<TaskCanceledException>(
+                    () => parallelLoop);
+                Assert.IsTrue(ex.CancellationToken == unknownCts.Token);
+                Assert.IsTrue(parallelLoop.IsFaulted);
+                Assert.IsTrue(parallelLoop.Exception.InnerExceptions.Count == 1);
+            }
         }
 
         [TestMethod]

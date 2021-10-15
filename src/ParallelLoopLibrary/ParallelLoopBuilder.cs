@@ -608,8 +608,7 @@ namespace ParallelLoopLibrary
                         if (counter - hysteresis[i] < cancelNumber)
                         {
                             Debug.Assert(!(entries[i].HasInput && !result.HasValue), i.ToString());
-                            tasks[i] = CreateTask(entries[i], result.Value,
-                                stoppingToken, cancelingToken);
+                            tasks[i] = CreateTask(entries[i], result.Value, cancelingToken);
 
                             if (entries[i].IsSynchronous)
                             {
@@ -634,7 +633,9 @@ namespace ParallelLoopLibrary
             catch (Exception ex)
             {
                 // Await all started tasks, and propagate all of their exceptions.
-                Task allTasks = Task.WhenAll(tasks.Where(t => t != null));
+                // Tasks that are canceled by unknown tokens, are converted to faulted.
+                Task allTasks = Task.WhenAll(tasks.Where(t => t != null).Select(
+                    t => CanceledToFaultedConditional(t, stoppingToken, cancelingToken)));
                 try { await allTasks.ConfigureAwait(false); }
                 catch
                 {
@@ -664,7 +665,7 @@ namespace ParallelLoopLibrary
         }
 
         private static Task<object> CreateTask(ParallelLoopEntry entry, object argument,
-            CancellationToken stoppingToken, CancellationToken cancelingToken)
+            CancellationToken cancelingToken)
         {
             Debug.Assert(entry.SyncAction != null || entry.AsyncAction != null);
             if (!entry.HasInput) argument = null;
@@ -685,15 +686,21 @@ namespace ParallelLoopLibrary
                 catch (OperationCanceledException oce) { task = Task.FromCanceled<object>(oce.CancellationToken); }
                 catch (Exception ex) { task = Task.FromException<object>(ex); }
             }
-            if (IsCompletedSuccessfullyOrIsFaulted(task)) return task;
+            return task;
+        }
+
+        private static Task<object> CanceledToFaultedConditional(Task<object> task,
+            CancellationToken stoppingToken, CancellationToken cancelingToken)
+        {
             return task.ContinueWith(t =>
             {
                 if (t.IsCanceled && !cancelingToken.IsCancellationRequested
                     && !stoppingToken.IsCancellationRequested)
                 {
+                    // The task is canceled, but none of the known tokens are canceled
                     t.GetAwaiter().GetResult(); // Propagate failure
                 }
-                return t; // In any other case, propagate the task as is.
+                return t; // In any other case, propagate the task as is
             }, default(CancellationToken), TaskContinuationOptions.ExecuteSynchronously |
                 TaskContinuationOptions.DenyChildAttach, TaskScheduler.Default)
             .Unwrap();
@@ -713,13 +720,6 @@ namespace ParallelLoopLibrary
             Debug.Assert(task != null);
             var status = task.Status;
             return status == TaskStatus.Faulted || status == TaskStatus.Canceled;
-        }
-
-        private static bool IsCompletedSuccessfullyOrIsFaulted(Task task)
-        {
-            Debug.Assert(task != null);
-            var status = task.Status;
-            return status == TaskStatus.RanToCompletion || status == TaskStatus.Faulted;
         }
 
         internal static T[] Append<T>(T[] array, T item)
