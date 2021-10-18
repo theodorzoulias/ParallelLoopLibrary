@@ -2,6 +2,10 @@
 
 # Parallel Loop Library
 
+[![Nuget](https://img.shields.io/nuget/v/ParallelLoopLibrary)](https://www.nuget.org/packages/ParallelLoopLibrary/)
+[![netstandard 1.3](https://img.shields.io/badge/netstandard-1.3-brightgreen.svg)](https://docs.microsoft.com/en-us/dotnet/standard/net-standard)
+[![netstandard 2.0](https://img.shields.io/badge/netstandard-2.0-brightgreen.svg)](https://docs.microsoft.com/en-us/dotnet/standard/net-standard)
+
 This .NET library helps at creating loops of actions that are running in parallel to each other,
 but sequentially to themselves. On each iteration of the loop, all actions are invoked once.
 The result of one action can by the input of another action, in which case the second
@@ -37,7 +41,7 @@ iterations before all three actions are up and running in parallel. The duration
 iteration of the loop will be determined by the slowest of the three actions. As soon
 as all three action have completed, a new iteration of the loop will start immediately.
 
-In each iteration the first action will be fetching the most recent expired entries,
+On each iteration the first action will be fetching the most recent expired entries,
 the second action will be deleting from the database the entries that were fetched one
 iteration back, and the third action will be recycling the files that were deleted from the
 database one iteration back. So the third action will always be two steps behind the
@@ -168,11 +172,10 @@ Task paralleLoop = ParallelLoopBuilder
 ## How to embed this library into your project
 
 You can install the [ParallelLoopLibrary](https://www.nuget.org/packages/ParallelLoopLibrary/) NuGet package.
-[![Nuget](https://img.shields.io/nuget/v/ParallelLoopLibrary)](https://www.nuget.org/packages/ParallelLoopLibrary/)
 You can also [download](https://github.com/theodorzoulias/ParallelLoopLibrary/releases) the project and build it locally, or just
 embed the single code file [`ParallelLoopBuilder.cs`](https://github.com/theodorzoulias/ParallelLoopLibrary/blob/main/src/ParallelLoopLibrary/ParallelLoopBuilder.cs)
 (~800 lines of code) into your project.
-This library has been tested on the .NET Core 3.0, .NET 5 and .NET Framework 4.6 platforms.
+This library has been tested on the .NET 5 and the .NET Framework 4.6 platforms.
 
 ## Performance
 
