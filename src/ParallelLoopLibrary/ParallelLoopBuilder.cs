@@ -691,8 +691,8 @@ namespace ParallelLoopLibrary
 
         private static Task<object> TaskFromCanceledSafe(CancellationToken token)
         {
-            TaskCompletionSource<object> tcs = new();
-            tcs.SetCanceled(token);
+            var tcs = new TaskCompletionSource<object>();
+            tcs.TrySetCanceled(token);
             return tcs.Task;
         }
 
