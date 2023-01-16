@@ -648,12 +648,12 @@ namespace ParallelLoopLibrary
                 }
 
                 // The only expected exception at this point is an OperationCanceledException,
-                // originated from either the stoppingToken ot the cancelingToken.
+                // originated from either the stoppingToken or the cancelingToken.
                 var oce = ex as OperationCanceledException;
                 if (oce != null)
                 {
                     if (oce.CancellationToken == cancelingToken)
-                        return Task.FromCanceled(oce.CancellationToken); // https://stackoverflow.com/questions/69552580/a-canceled-task-propagates-two-different-types-of-exceptions-depending-on-how-i
+                        return TaskFromCanceledSafe(oce.CancellationToken); // https://stackoverflow.com/questions/69552580/a-canceled-task-propagates-two-different-types-of-exceptions-depending-on-how-i
 
                     if (oce.CancellationToken == stoppingToken) return Task.CompletedTask;
                 }
@@ -683,10 +683,17 @@ namespace ParallelLoopLibrary
             else // SyncAction & IsSynchronous
             {
                 try { task = Task.FromResult(entry.SyncAction(argument)); }
-                catch (OperationCanceledException oce) { task = Task.FromCanceled<object>(oce.CancellationToken); }
+                catch (OperationCanceledException oce) { task = TaskFromCanceledSafe(oce.CancellationToken); }
                 catch (Exception ex) { task = Task.FromException<object>(ex); }
             }
             return task;
+        }
+
+        private static Task<object> TaskFromCanceledSafe(CancellationToken token)
+        {
+            var tcs = new TaskCompletionSource<object>();
+            tcs.TrySetCanceled(token);
+            return tcs.Task;
         }
 
         private static Task<object> CanceledToFaultedConditional(Task<object> task,
